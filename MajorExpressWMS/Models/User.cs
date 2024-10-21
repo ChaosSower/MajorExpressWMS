@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using Microsoft.EntityFrameworkCore;
+
 using MajorExpressWMS.Data;
 using MajorExpressWMS.Interfaces;
 
@@ -8,6 +10,7 @@ namespace MajorExpressWMS.Models
     /// <summary>
     /// Строка пользователя таблицы <see cref="ApplicationContext.Users"/>
     /// </summary>
+    [Index(nameof(Login), IsUnique = true)]
     internal class User : IDatabase
     {
         public int ID { get; private set; }

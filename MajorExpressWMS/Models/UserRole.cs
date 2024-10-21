@@ -16,6 +16,7 @@ namespace MajorExpressWMS.Models
         /// Роль пользователя
         /// </summary>
         [MaxLength(50)]
+        [Required]
         public required string Role { get; set; }
 
         // Навигационные свойства //

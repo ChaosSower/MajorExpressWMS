@@ -16,6 +16,7 @@ namespace MajorExpressWMS.Models
         /// Название компании
         /// </summary>
         [MaxLength(50)]
+        [Required]
         public required string Name { get; set; }
 
         // Навигационные свойства //

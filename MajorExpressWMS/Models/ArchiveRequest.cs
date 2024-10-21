@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 using MajorExpressWMS.Data;
 using MajorExpressWMS.Interfaces;
@@ -15,12 +16,14 @@ namespace MajorExpressWMS.Models
         /// <summary>
         /// Номер архивной заявки заявки
         /// </summary>
+        [Required]
         public required string RequestNumber { get; set; }
 
         /// <summary>
         /// Дата помещения в архив
         /// </summary>
         [Column(TypeName = "date")]
+        [Required]
         public required DateTime ArchiveDate { get; set; }
 
         /// <summary>

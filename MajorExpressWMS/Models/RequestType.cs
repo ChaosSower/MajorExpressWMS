@@ -16,6 +16,7 @@ namespace MajorExpressWMS.Models
         /// Тип заявки
         /// </summary>
         [MaxLength(50)]
+        [Required]
         public required string Type { get; set; }
 
         // Навигационные свойства //

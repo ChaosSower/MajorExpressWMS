@@ -17,32 +17,38 @@ namespace MajorExpressWMS.Models
         /// Номер заявки
         /// </summary>
         [MaxLength(50)]
+        [Required]
         public required string Number { get; set; }
 
         /// <summary>
         /// ID типа заявки
         /// </summary>
+        [Required]
         public required int RequestTypeID { get; set; }
 
         /// <summary>
         /// ID статуса заявки
         /// </summary>
+        [Required]
         public required int RequestStatusID { get; set; }
 
         /// <summary>
         /// Дата создания заявки
         /// </summary>
         [Column(TypeName = "date")]
+        [Required]
         public required DateTime CreationDate { get; set; }
 
         /// <summary>
         /// ID компании
         /// </summary>
+        [Required]
         public required int CompanyID { get; set; }
 
         /// <summary>
         /// ID исполнителя
         /// </summary>
+        [Required]
         public required int ExecutorID { get; set; }
 
         // Навигационные свойства //

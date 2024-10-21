@@ -19,12 +19,14 @@ namespace MajorExpressWMS.Models
         /// Имя пользователя
         /// </summary>
         [MaxLength(50)]
+        [Required]
         public required string Name { get; set; }
 
         /// <summary>
         /// Фамилия пользователя
         /// </summary>
         [MaxLength(50)]
+        [Required]
         public required string Surname { get; set; }
 
         /// <summary>
@@ -37,17 +39,20 @@ namespace MajorExpressWMS.Models
         /// Логин пользователя
         /// </summary>
         [MaxLength(50)]
+        [Required]
         public required string Login { get; set; }
 
         /// <summary>
         /// Пароль пользователя
         /// </summary>
         [MaxLength(50)]
+        [Required]
         public required string Password { get; set; }
 
         /// <summary>
         /// ID роли пользователя
         /// </summary>
+        [Required]
         public required int UserRoleID { get; set; }
 
         // Навигационные свойства //

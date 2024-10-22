@@ -6,18 +6,21 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:MajorExpressWMS.Views"
     mc:Ignorable="d"
-    d:DesignWidth="250" d:DesignHeight="150"
+    d:DesignWidth="400" d:DesignHeight="200"
     Title="AuthorizationPage"
 >
 
-    <Grid Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Width="250" Height="150">
+    <Grid Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Width="400" Height="200">
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <TextBlock Text="Авторизация пользователя" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="28"/>
+        
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,5">
                 <TextBlock Text="Логин:" Margin="0,0,5,0" FontSize="16" VerticalAlignment="Center"/>
                 <TextBox x:Name="LoginTextBox" Width="150" Height="30" FontSize="16" VerticalContentAlignment="Center"/>
@@ -28,7 +31,7 @@
             </StackPanel>
         </StackPanel>
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>

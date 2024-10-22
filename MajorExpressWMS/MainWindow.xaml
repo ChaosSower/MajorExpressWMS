@@ -6,11 +6,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:MajorExpressWMS"
     mc:Ignorable="d"
-    Title="Система управления складом MajorExpress" Width="800" Height="450" WindowStartupLocation="CenterScreen"
+    Title="Система управления складом MajorExpress" Width="1250" Height="750" MinWidth="500" MinHeight="250" WindowStartupLocation="CenterScreen"
 >
 
-    <Grid>
-
-    </Grid>
+    <Frame x:Name="MainWindowFrame" NavigationUIVisibility="Hidden" Focusable="False" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
 
 </Window>

@@ -6,6 +6,9 @@
 # Строка подключения к БД
 MajorExpressWMS/bin/Debug/net8.0-windows/MajorExpressDB_WMS/MajorExpressDB_WMS.txt
 
+# Папка с миграциями
+MajorExpressWMS/Migrations
+
 # User-specific files
 *.rsuser
 *.suo

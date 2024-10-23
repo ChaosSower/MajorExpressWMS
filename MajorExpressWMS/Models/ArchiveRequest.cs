@@ -20,6 +20,25 @@ namespace MajorExpressWMS.Models
         public required string RequestNumber { get; set; }
 
         /// <summary>
+        /// ID создателя заявки
+        /// </summary>
+        [Required]
+        public required int CreatorID { get; set; }
+
+        /// <summary>
+        /// Дата создания заявки
+        /// </summary>
+        [Column(TypeName = "date")]
+        [Required]
+        public required DateTime CreationDate { get; set; }
+
+        /// <summary>
+        /// ID инициатора архивации заявки
+        /// </summary>
+        [Required]
+        public required int ArchiverID { get; set; }
+
+        /// <summary>
         /// Дата помещения в архив
         /// </summary>
         [Column(TypeName = "date")]
@@ -30,5 +49,17 @@ namespace MajorExpressWMS.Models
         /// Описание заявки (комментарий)
         /// </summary>
         public string? Description { get; set; }
+
+        // Навигационные свойства //
+
+        /// <summary>
+        /// Навигационное свойство создателя заявки
+        /// </summary>
+        public RequestCreator? Creator { get; set; }
+
+        /// <summary>
+        /// Навигационное свойство инициатора архивации заявки
+        /// </summary>
+        public RequestArchiver? Archiver { get; set; }
     }
 }

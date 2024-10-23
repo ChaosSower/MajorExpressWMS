@@ -33,6 +33,12 @@ namespace MajorExpressWMS.Models
         public required int RequestStatusID { get; set; }
 
         /// <summary>
+        /// ID создателя заявки
+        /// </summary>
+        [Required]
+        public required int CreatorID { get; set; }
+
+        /// <summary>
         /// Дата создания заявки
         /// </summary>
         [Column(TypeName = "date")]
@@ -40,16 +46,16 @@ namespace MajorExpressWMS.Models
         public required DateTime CreationDate { get; set; }
 
         /// <summary>
+        /// ID исполнителя заявки
+        /// </summary>
+        [Required]
+        public required int ExecutorID { get; set; }
+
+        /// <summary>
         /// ID компании
         /// </summary>
         [Required]
         public required int CompanyID { get; set; }
-
-        /// <summary>
-        /// ID исполнителя
-        /// </summary>
-        [Required]
-        public required int ExecutorID { get; set; }
 
         // Навигационные свойства //
 
@@ -64,13 +70,18 @@ namespace MajorExpressWMS.Models
         public RequestStatus? RequestStatus { get; set; }
 
         /// <summary>
-        /// Навигационное свойство компании
+        /// Навигационное свойство создателя заявки (пользователь)
         /// </summary>
-        public Company? Company { get; set; }
+        public RequestCreator? Creator { get; set; }
 
         /// <summary>
         /// Навигационное свойство исполнителя заявки (пользователь)
         /// </summary>
-        public User? Executor { get; set; }
+        public RequestExecutor? Executor { get; set; }
+
+        /// <summary>
+        /// Навигационное свойство компании
+        /// </summary>
+        public Company? Company { get; set; }
     }
 }

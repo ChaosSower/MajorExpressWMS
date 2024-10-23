@@ -13,6 +13,13 @@ namespace MajorExpressWMS.Data
     internal class ApplicationContext : DbContext
     {
         /// <summary>
+        /// Строка подключения к БД
+        /// </summary>
+        private string? DBPath { get; }
+
+        // Пользователи //
+
+        /// <summary>
         /// Таблица "Роли пользователей"
         /// </summary>
         public DbSet<UserRole> UserRoles { get; set; }
@@ -21,6 +28,23 @@ namespace MajorExpressWMS.Data
         /// Таблица "Пользователи"
         /// </summary>
         public DbSet<User> Users { get; set; }
+
+        /// <summary>
+        /// Таблица создателей заявок
+        /// </summary>
+        public DbSet<RequestCreator> RequestCreators { get; set; }
+
+        /// <summary>
+        /// Таблица "Исполнители" (курьеры)
+        /// </summary>
+        public DbSet<RequestExecutor> RequestExecutors { get; set; }
+
+        /// <summary>
+        /// Таблица "Архивщики" (инициаторы архивации заявки)
+        /// </summary>
+        public DbSet<RequestArchiver> RequestArchivers { get; set; }
+
+        // Заявки //
 
         /// <summary>
         /// Таблица "Типы заявок"
@@ -46,11 +70,6 @@ namespace MajorExpressWMS.Data
         /// Таблица "Архивные заявки"
         /// </summary>
         public DbSet<ArchiveRequest> ArchiveRequests { get; set; }
-
-        /// <summary>
-        /// Строка подключения к БД
-        /// </summary>
-        private string? DBPath { get; }
 
         public ApplicationContext()
         {
@@ -127,17 +146,53 @@ namespace MajorExpressWMS.Data
                     ApplicationContext.SaveChanges();
                 }
 
-                // Заполнение таблицы "Компании"
-                if (!ApplicationContext.Companies.Any())
+                // Заполнение таблицы создателей заявок
+                if (!ApplicationContext.RequestCreators.Any())
                 {
-                    List<Company> Companies =
+                    List<RequestCreator> RequestCreators =
                     [
-                        new() { Name = "Молот и наковальня" },
-                        new() { Name = "Химера Экспресс" },
-                        new() { Name = "Логистик Технолоджис" }
+                        new() { UserID = 1 },
+                        new() { UserID = 2 },
+                        new() { UserID = 3 },
+                        new() { UserID = 4 },
+                        new() { UserID = 5 }
                     ];
 
-                    ApplicationContext.Companies.AddRange(Companies);
+                    ApplicationContext.RequestCreators.AddRange(RequestCreators);
+
+                    ApplicationContext.SaveChanges();
+                }
+
+                // Заполнение таблицы "Исполнители"
+                if (!ApplicationContext.RequestExecutors.Any())
+                {
+                    List<RequestExecutor> RequestExecutors =
+                    [
+                        new() { UserID = 6 },
+                        new() { UserID = 7 },
+                        new() { UserID = 8 },
+                        new() { UserID = 9 },
+                        new() { UserID = 10 }
+                    ];
+
+                    ApplicationContext.RequestExecutors.AddRange(RequestExecutors);
+
+                    ApplicationContext.SaveChanges();
+                }
+
+                // Заполнение таблицы "Архивщики"
+                if (!ApplicationContext.RequestArchivers.Any())
+                {
+                    List<RequestArchiver> RequestArchivers =
+                    [
+                        new() { UserID = 2 },
+                        new() { UserID = 4 },
+                        new() { UserID = 6 },
+                        new() { UserID = 8 },
+                        new() { UserID = 10 }
+                    ];
+
+                    ApplicationContext.RequestArchivers.AddRange(RequestArchivers);
 
                     ApplicationContext.SaveChanges();
                 }
@@ -174,16 +229,31 @@ namespace MajorExpressWMS.Data
                     ApplicationContext.SaveChanges();
                 }
 
+                // Заполнение таблицы "Компании"
+                if (!ApplicationContext.Companies.Any())
+                {
+                    List<Company> Companies =
+                    [
+                        new() { Name = "Молот и наковальня" },
+                        new() { Name = "Химера Экспресс" },
+                        new() { Name = "Логистик Технолоджис" }
+                    ];
+
+                    ApplicationContext.Companies.AddRange(Companies);
+
+                    ApplicationContext.SaveChanges();
+                }
+
                 // Заполнение таблицы "Архивные заявки"
                 if (!ApplicationContext.ArchiveRequests.Any())
                 {
                     List<ArchiveRequest> ArchiveRequests =
                     [
-                        new() { RequestNumber = "2341_AP_DD_899", ArchiveDate = new(2022, 01, 12) },
-                        new() { RequestNumber = "412_LP_901", ArchiveDate = new(2022, 07, 29), Description = "Отменена по причине: \"Груз повреждён при транспортировке\"" },
-                        new() { RequestNumber = "117892_SA_LU_9", ArchiveDate = new(2023, 08, 05) },
-                        new() { RequestNumber = "15789_F_9", ArchiveDate = new(2023, 10, 25) },
-                        new() { RequestNumber = "87_LO_PO_83299", ArchiveDate = new(2024, 02, 17), Description = "Отменена по причине: \"Компания-контрагент рассторгнула договор\"" }
+                        new() { RequestNumber = "2341_AP_DD_899", CreatorID = 1, CreationDate = new(2021, 01, 25), ArchiverID = 5, ArchiveDate = new(2021, 01, 26) },
+                        new() { RequestNumber = "412_LP_901", CreatorID = 5, CreationDate = new(2022, 05, 14), ArchiverID = 1, ArchiveDate = new(2022, 05, 20), Description = "Отменена по причине: \"Груз повреждён при транспортировке\"" },
+                        new() { RequestNumber = "117892_SA_LU_9", CreatorID = 4, CreationDate = new(2023, 08, 01), ArchiverID = 3, ArchiveDate = new(2023, 08, 05) },
+                        new() { RequestNumber = "15789_F_9", CreatorID = 3, CreationDate = new(2023, 10, 05), ArchiverID = 2, ArchiveDate = new(2023, 10, 25) },
+                        new() { RequestNumber = "87_LO_PO_83299", CreatorID = 2, CreationDate = new(2024, 02, 11), ArchiverID = 4, ArchiveDate = new(2024, 02, 17), Description = "Отменена по причине: \"Компания-контрагент рассторгнула договор\"" }
                     ];
 
                     ApplicationContext.ArchiveRequests.AddRange(ArchiveRequests);
@@ -196,16 +266,16 @@ namespace MajorExpressWMS.Data
                 {
                     List<Request> Requests =
                     [
-                        new() { Number = "123_RU_313", RequestTypeID = 1, RequestStatusID = 1, CreationDate = new(2024, 01, 17), CompanyID = 1, ExecutorID = 1 },
-                        new() { Number = "6313_RW_1583", RequestTypeID = 2, RequestStatusID = 3, CreationDate = new(2024, 01, 29), CompanyID = 3, ExecutorID = 5 },
-                        new() { Number = "72_RL_OY_23", RequestTypeID = 3, RequestStatusID = 2, CreationDate = new(2024, 02, 15), CompanyID = 2, ExecutorID = 2 },
-                        new() { Number = "6709134_UZ_59723", RequestTypeID = 2, RequestStatusID = 1, CreationDate = new(2024, 02, 11), CompanyID = 2, ExecutorID = 6 },
-                        new() { Number = "735304_KE_9", RequestTypeID = 2, RequestStatusID = 5, CreationDate = new(2024, 03, 24), CompanyID = 3, ExecutorID = 7 },
-                        new() { Number = "7_YT_ED_313", RequestTypeID = 2, RequestStatusID = 4, CreationDate = new(2024, 03, 27), CompanyID = 3, ExecutorID = 9 },
-                        new() { Number = "8998_UK_424", RequestTypeID = 3, RequestStatusID = 4, CreationDate = new(2024, 04, 05), CompanyID = 2, ExecutorID = 10 },
-                        new() { Number = "8_UZ_KO_2", RequestTypeID = 3, RequestStatusID = 3, CreationDate = new(2024, 08, 20), CompanyID = 1, ExecutorID = 3 },
-                        new() { Number = "432_K_9", RequestTypeID = 1, RequestStatusID = 2, CreationDate = new(2024, 09, 01), CompanyID = 3, ExecutorID = 4 },
-                        new() { Number = "3_PY_JO_01", RequestTypeID = 1, RequestStatusID = 5, CreationDate = new(2021, 10, 19), CompanyID = 1, ExecutorID = 8 }
+                        new() { Number = "123_RU_313", RequestTypeID = 1, RequestStatusID = 1, CreatorID = 1, CreationDate = new(2024, 01, 17), ExecutorID = 1, CompanyID = 1 },
+                        new() { Number = "6313_RW_1583", RequestTypeID = 2, RequestStatusID = 3, CreatorID = 2, CreationDate = new(2024, 01, 29), ExecutorID = 2, CompanyID = 3 },
+                        new() { Number = "72_RL_OY_23", RequestTypeID = 3, RequestStatusID = 2, CreatorID = 3, CreationDate = new(2024, 02, 15), ExecutorID = 5, CompanyID = 2 },
+                        new() { Number = "6709134_UZ_59723", RequestTypeID = 2, RequestStatusID = 1, CreatorID = 4, CreationDate = new(2024, 02, 11), ExecutorID = 4, CompanyID = 2 },
+                        new() { Number = "735304_KE_9", RequestTypeID = 2, RequestStatusID = 5, CreatorID = 5, CreationDate = new(2024, 03, 24), ExecutorID = 3, CompanyID = 3 },
+                        new() { Number = "7_YT_ED_313", RequestTypeID = 2, RequestStatusID = 4, CreatorID = 5, CreationDate = new(2024, 03, 27), ExecutorID = 2, CompanyID = 3 },
+                        new() { Number = "8998_UK_424", RequestTypeID = 3, RequestStatusID = 4, CreatorID = 4, CreationDate = new(2024, 04, 05), ExecutorID = 4, CompanyID = 2 },
+                        new() { Number = "8_UZ_KO_2", RequestTypeID = 3, RequestStatusID = 3, CreatorID = 3, CreationDate = new(2024, 08, 20), ExecutorID = 3, CompanyID = 1 },
+                        new() { Number = "432_K_9", RequestTypeID = 1, RequestStatusID = 2, CreatorID = 2, CreationDate = new(2024, 09, 01), ExecutorID = 1, CompanyID = 3 },
+                        new() { Number = "3_PY_JO_01", RequestTypeID = 1, RequestStatusID = 5, CreatorID = 1, CreationDate = new(2021, 10, 19), ExecutorID = 5, CompanyID = 1 }
                     ];
 
                     ApplicationContext.Requests.AddRange(Requests);

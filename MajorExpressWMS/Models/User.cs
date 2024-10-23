@@ -61,10 +61,5 @@ namespace MajorExpressWMS.Models
         /// Навигационное свойство роли пользователя
         /// </summary>
         public UserRole? UserRole { get; set; }
-
-        /// <summary>
-        /// Навигационное свойство заявок у пользователя
-        /// </summary>
-        public ICollection<Request>? Requests { get; set; }
     }
 }

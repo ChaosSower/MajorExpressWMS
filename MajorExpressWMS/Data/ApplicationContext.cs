@@ -158,7 +158,7 @@ namespace MajorExpressWMS.Data
                     new() { Name = "Егор", Surname = "Бревнов", Patronymic = "Романович", Login = "BrevER", Password = "45678", UserRoleID = 4 },
                     new() { Name = "Константин", Surname = "Яносов", Patronymic = "Игоревич", Login = "YanoKI", Password = "45678", UserRoleID = 4 },
                     new() { Name = "Роман", Surname = "Щукин", Patronymic = "Дмитриевич", Login = "ChukRD", Password = "56789", UserRoleID = 5 },
-                    new() { Name = "Анастасия", Surname = "Ромина", Patronymic = "Андреевна", Login = "RomiAA", Password = "56789", UserRoleID = 5 }
+                    new() { Name = "Анастасия", Surname = "Ромина", Login = "RomiAN", Password = "56789", UserRoleID = 5 }
                 ];
 
                 ApplicationContext.Users.AddRange(Users);

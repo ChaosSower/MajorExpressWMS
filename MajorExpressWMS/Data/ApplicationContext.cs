@@ -8,14 +8,19 @@ using MajorExpressWMS.Models;
 namespace MajorExpressWMS.Data
 {
     /// <summary>
-    /// Класс контекста из БД
+    /// Класс контекста БД
     /// </summary>
     internal class ApplicationContext : DbContext
     {
         /// <summary>
+        /// Путь к файлу со строкой подключения к БД
+        /// </summary>
+        private static string? PathToFileOfDB;
+
+        /// <summary>
         /// Строка подключения к БД
         /// </summary>
-        private string? DBPath { get; }
+        private readonly string? DBConnection;
 
         // Пользователи //
 
@@ -71,21 +76,28 @@ namespace MajorExpressWMS.Data
         /// </summary>
         public DbSet<ArchiveRequest> ArchiveRequests { get; set; }
 
-        public ApplicationContext()
+        /// <summary>
+        /// Конструктор класса контекста БД
+        /// </summary>
+        /// <param name="IsDatabaseCreated">out bool-переменная, указывающая, была ли создана БД</param>
+        public ApplicationContext(out bool IsDatabaseCreated)
         {
+            IsDatabaseCreated = false;
+
             string PathToExe = AppDomain.CurrentDomain.BaseDirectory;
-            string FileOfDB = Path.Join(PathToExe, "MajorExpressDB_WMS/MajorExpressDB_WMS.txt");
+            PathToFileOfDB = Path.Join(PathToExe, "MajorExpressDB_WMS/MajorExpressDB_WMS.txt");
 
-            if (File.Exists(FileOfDB))
+            if (File.Exists(PathToFileOfDB))
             {
-                DBPath = File.ReadAllLines(FileOfDB)[0];
+                DBConnection = File.ReadAllLines(PathToFileOfDB)[0];
 
-                InitializeDatabase(this);
+                int RetryCount = 0;
+                IsDatabaseCreated = InitializeDatabase(this, ref RetryCount);
             }
 
             else
             {
-                MessageBox.Show($"Похоже, что файл {FileOfDB.Split("/")[^1]} со строкой подключения отсутствует по полному пути:\n\n{FileOfDB}\n\nНе удалось создать/подключиться к базе данных", "Ошибка подключения", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Похоже, что файл {PathToFileOfDB.Split("/")[^1]} со строкой подключения отсутствует по полному пути:\n\n{PathToFileOfDB}\n\nНе удалось создать/подключиться к базе данных", "Ошибка подключения", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -95,30 +107,53 @@ namespace MajorExpressWMS.Data
         /// <param name="Options">Параметры для <see cref="DbContextOptionsBuilder"/></param>
         protected override void OnConfiguring(DbContextOptionsBuilder Options)
         {
-            Options.UseSqlServer(DBPath);
+            Options.UseSqlServer(DBConnection);
         }
 
         /// <summary>
         /// Статический метод создания базы данных с таблицами
         /// </summary>
         /// <param name="ApplicationContext"></param>
-        private static void InitializeDatabase(ApplicationContext ApplicationContext)
+        private static bool InitializeDatabase(ApplicationContext ApplicationContext, ref int RetryCount)
         {
             try
             {
                 ApplicationContext.Database.Migrate();
 
                 Seed(ApplicationContext);
+
+                return true;
             }
 
             catch
             {
                 // Пересоздание БД в случае ошибок //
 
-                ApplicationContext.Database.EnsureDeleted();
+                if (RetryCount < 1)
+                {
+                    try
+                    {
+                        ApplicationContext.Database.EnsureDeleted();
+                    }
 
-                InitializeDatabase(ApplicationContext);
+                    catch
+                    {
+                        MessageBox.Show($"Не удалось подключиться к базе данных!\n\nУбедитесь, что:\n\n1) В файле {PathToFileOfDB?.Split("/")[^1]} по полному пути:\n\n{PathToFileOfDB}\n\nуказана верная строка подключения.\n\n2) У вас есть доступ к базе данных.", "Ошибка подключения к базе данных", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                        return false;
+                    }
+
+                    RetryCount++;
+                    InitializeDatabase(ApplicationContext, ref RetryCount);
+                }
+
+                else
+                {
+                    MessageBox.Show("Не удалось инициализировать/изменить базу данных после нескольких попыток.\n\nЭто может свидетельствовать об ошибках миграции.", "Ошибка взаимодействия с базой данных", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
+
+            return false;
         }
 
         /// <summary>

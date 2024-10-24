@@ -18,11 +18,12 @@ namespace MajorExpressWMS
         {
             InitializeComponent();
 
-            _ApplicationContext = new();
+            bool IsDatabaseCreated;
+            _ApplicationContext = new(out IsDatabaseCreated);
 
             _MainWindowFrame = MainWindowFrame;
 
-            MainWindowFrame.Navigate(new MainWindowPage());
+            MainWindowFrame.Navigate(new MainWindowPage(IsDatabaseCreated));
         }
     }
 }

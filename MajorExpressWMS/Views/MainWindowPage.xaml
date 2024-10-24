@@ -10,7 +10,7 @@
     Title="MainWindowPage"
 >
 
-    <Grid Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Width="300" Height="125">
+    <Grid x:Name="MainWindowPageGrid" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Width="300" Height="125">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

@@ -8,9 +8,14 @@ namespace MajorExpressWMS.Views
     /// </summary>
     public partial class MainWindowPage : Page
     {
-        public MainWindowPage()
+        public MainWindowPage(bool IsDatabaseCreated)
         {
             InitializeComponent();
+
+            if (!IsDatabaseCreated) // блокировка доступа к работе с БД, к которой нет подключения
+            {
+                MainWindowPageGrid.IsEnabled = false;
+            }
         }
 
         /// <summary>

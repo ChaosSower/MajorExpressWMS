@@ -12,14 +12,14 @@ namespace MajorExpressWMS
     public partial class MainWindow : Window
     {
         public static Frame? _MainWindowFrame;
-        internal static ApplicationContext? _ApplicationContext;
+        internal static ApplicationContext? ApplicationContext { get; private set; }
 
         public MainWindow()
         {
             InitializeComponent();
 
             bool IsDatabaseCreated;
-            _ApplicationContext = new(out IsDatabaseCreated);
+            ApplicationContext = new(out IsDatabaseCreated);
 
             _MainWindowFrame = MainWindowFrame;
 

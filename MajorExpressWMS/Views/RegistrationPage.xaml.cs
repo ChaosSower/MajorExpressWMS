@@ -14,7 +14,7 @@ namespace MajorExpressWMS.Views
         {
             InitializeComponent();
 
-            RoleComboBox.ItemsSource = MainWindow._ApplicationContext?.UserRoles
+            RoleComboBox.ItemsSource = MainWindow.ApplicationContext?.UserRoles
                 .Select(UserRole => UserRole.Role)
                 .ToList();
         }
@@ -43,15 +43,15 @@ namespace MajorExpressWMS.Views
 
             try
             {
-                _ = new RegistrationViewModel
-                    (
-                        NameTextBox.Text,
-                        SurnameTextBox.Text,
-                        PatronymicTextBox.Text,
-                        LoginTextBox.Text,
-                        PasswordTextBox.Text,
-                        RoleComboBox.SelectedIndex + 1
-                    );
+                _ = new UserRegistrationViewModel
+                (
+                    NameTextBox.Text,
+                    SurnameTextBox.Text,
+                    PatronymicTextBox.Text,
+                    LoginTextBox.Text,
+                    PasswordTextBox.Text,
+                    RoleComboBox.SelectedIndex + 1
+                );
 
                 MessageBox.Show("Пользователь был успешно зарегистрирован и добавлен в базу данных!", string.Empty, MessageBoxButton.OK, MessageBoxImage.Information);
 

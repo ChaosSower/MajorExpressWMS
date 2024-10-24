@@ -6,10 +6,29 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:MajorExpressWMS.Views"
     mc:Ignorable="d"
-    d:DesignWidth="800" d:DesignHeight="450"
+    d:DesignWidth="500" d:DesignHeight="250"
     Title="UserOptionsPage"
 >
 
-    <UniformGrid Columns="1" x:Name="UserOptionsUniformGrid" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" VerticalAlignment="Center" Width="800" Height="450"/>
-    
+    <Grid Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border BorderThickness="5" BorderBrush="Black" Background="White" HorizontalAlignment="Left" Margin="10,10,0,0" Padding="10">
+            <StackPanel>
+                <TextBlock x:Name="UserDataTextBlock" Text="Вы авторизовались как: [...]" FontSize="24" FontStyle="Italic"/>
+                <TextBlock x:Name="UserRoleTextBlock" Grid.Row="1" Text="Ваша роль: [...]" FontSize="24" FontStyle="Italic"/>
+            </StackPanel>
+        </Border>
+
+        <UniformGrid x:Name="UserOptionsUniformGrid" Grid.Row="1" Columns="1" Margin="75"/>
+
+        <Button x:Name="GoBackButton" Grid.Row="2" Content="Назад" Margin="2.5" FontSize="16" Click="GoBackButton_Click"/>
+
+    </Grid>
+
 </Page>

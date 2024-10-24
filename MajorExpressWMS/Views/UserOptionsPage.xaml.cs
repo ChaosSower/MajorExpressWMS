@@ -1,4 +1,6 @@
 ﻿using System.Windows.Controls;
+using System.Collections.Frozen;
+using System.Windows;
 
 using MajorExpressWMS.Models;
 
@@ -13,23 +15,31 @@ namespace MajorExpressWMS.Views
         {
             InitializeComponent();
 
-            // Кнопки управления, отсортированные в порядке полномочий //
+            UserDataTextBlock.Text = $"Вы авторизовались как: {string.Join(" ", [User.Surname, User.Name, User.Patronymic]).TrimEnd()}";
+            UserRoleTextBlock.Text = $"Ваша роль: {User.UserRole?.Role}";
 
-            Button ObserveRequestsButton = new() { Content = "Просмотр заявок", Margin = new(5), FontSize = 16 };
-            Button TrackRequestButton = new() { Content = "Ослеживание заявки", Margin = new(5), FontSize = 16 };
-            Button CreateRequestButton = new() { Content = "Создать заявку", Margin = new(5), FontSize = 16 };
-            Button EditRequestButton = new() { Content = "Изменить заявку", Margin = new(5), FontSize = 16 };
-            Button CloseRequestButton = new() { Content = "Закрыть заявку", Margin = new(5), FontSize = 16 };
-            Button ManageUsersButton = new() { Content = "Управление пользователями", Margin = new(5), FontSize = 16 };
+            // Кнопки управления (отсортированы в порядке полномочий) //
 
-            Dictionary<string, List<Button>> UserOptionButtonDictionary = new()
+            Button ObserveRequestsButton = new() { Content = "Просмотр заявок", Margin = new(25), FontSize = 16 };
+            Button CreateRequestButton = new() { Content = "Создать заявку", Margin = new(25), FontSize = 16 };
+            Button ManageRequestsButton = new() { Content = "Управление заявками", Margin = new(25), FontSize = 16 };
+            Button ManageUsersButton = new() { Content = "Управление пользователями", Margin = new(25), FontSize = 16 };
+
+            ObserveRequestsButton.Click += (sender, e) => MainWindow._MainWindowFrame?.Navigate(new ObserveOrManageRequestsPage());
+            CreateRequestButton.Click += (sender, e) => MainWindow._MainWindowFrame?.Navigate(new CreateOrEditRequestPage(User));
+            ManageRequestsButton.Click += (sender, e) => MainWindow._MainWindowFrame?.Navigate(new ObserveOrManageRequestsPage(User));
+            ManageUsersButton.Click += (sender, e) => MainWindow._MainWindowFrame?.Navigate(new ManageUsersPage());
+
+            Dictionary<string, List<Button>> _UserOptionButtonDictionary = new()
             {
-                { "Пользователь", [ ObserveRequestsButton, TrackRequestButton ] },
-                { "Курьер", [ CreateRequestButton ] },
-                { "Отправитель", [ EditRequestButton ] },
-                { "Получатель", [ CloseRequestButton ] },
-                { "Администратор", [ ObserveRequestsButton, TrackRequestButton, EditRequestButton, ManageUsersButton ] }
+                { "Пользователь", [ ObserveRequestsButton ] },
+                { "Курьер", [ ObserveRequestsButton ] },
+                { "Отправитель", [ ObserveRequestsButton, CreateRequestButton, ManageRequestsButton ] },
+                { "Получатель", [ ObserveRequestsButton, ManageRequestsButton ] },
+                { "Администратор", [ ObserveRequestsButton, ManageRequestsButton, ManageUsersButton ] }
             };
+
+            FrozenDictionary<string, List<Button>> UserOptionButtonDictionary = _UserOptionButtonDictionary.ToFrozenDictionary();
 
             if (User.UserRole?.Role != null && UserOptionButtonDictionary.TryGetValue(User.UserRole.Role, out List<Button>? Buttons))
             {
@@ -38,6 +48,16 @@ namespace MajorExpressWMS.Views
                     UserOptionsUniformGrid.Children.Add(Button);
                 }
             }
+        }
+
+        /// <summary>
+        /// Событие нажатия на кнопку "Назад"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void GoBackButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow._MainWindowFrame?.GoBack();
         }
     }
 }

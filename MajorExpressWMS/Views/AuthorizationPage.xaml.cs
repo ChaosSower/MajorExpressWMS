@@ -54,7 +54,7 @@ namespace MajorExpressWMS.Views
                 return;
             }
 
-            User? User = MainWindow._ApplicationContext?.Users.Include(User => User.UserRole).FirstOrDefault(User => User.Login == LoginTextBox.Text);
+            User? User = MainWindow.ApplicationContext?.Users.Include(User => User.UserRole).FirstOrDefault(User => User.Login == LoginTextBox.Text);
 
             if (User != null)
             {

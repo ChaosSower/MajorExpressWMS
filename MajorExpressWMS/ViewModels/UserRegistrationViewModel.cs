@@ -5,9 +5,13 @@ namespace MajorExpressWMS.ViewModels
     /// <summary>
     /// Модель представления регистрации пользователя
     /// </summary>
-    internal class RegistrationViewModel
+    internal class UserRegistrationViewModel
     {
-        public RegistrationViewModel(params object[] UserData)
+        /// <summary>
+        /// Конструктор модели представления регистрации пользователя
+        /// </summary>
+        /// <param name="UserData">Данные регистрируемого пользователя</param>
+        public UserRegistrationViewModel(params object[] UserData)
         {
             User NewUser = new()
             {
@@ -19,8 +23,8 @@ namespace MajorExpressWMS.ViewModels
                 UserRoleID = (int)UserData[5]
             };
 
-            MainWindow._ApplicationContext?.Users.Add(NewUser);
-            MainWindow._ApplicationContext?.SaveChanges();
+            MainWindow.ApplicationContext?.Users.Add(NewUser);
+            MainWindow.ApplicationContext?.SaveChanges();
         }
     }
 }

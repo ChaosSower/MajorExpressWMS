@@ -1,0 +1,78 @@
+﻿<Page
+    x:Class="MajorExpressWMS.Views.ObserveOrManageRequestsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:MajorExpressWMS.Views"
+    mc:Ignorable="d"
+    d:DesignWidth="1250" d:DesignHeight="750"
+    Title="ObserveOrManageRequestsPage"
+>
+
+    <Grid Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="PageTitleTextBlock" Text="[...] заявок" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="32" Margin="15"/>
+
+        <DataGrid x:Name="ObserveOrManageRequestsPageDataGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" RowHeight="30">
+
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource HorizontallyCenteredHeaderStyle}"/>
+            </DataGrid.ColumnHeaderStyle>
+
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell" BasedOn="{StaticResource CenteredCellStyle}"/>
+            </DataGrid.CellStyle>
+
+            <DataGrid.Resources>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="MaxHeight" Value="60"/>
+                </Style>
+            </DataGrid.Resources>
+
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Cursor="Hand" Width="20" Height="20" Margin="5,0" ToolTip="Посмотреть информацию о заявке" Command="{Binding ReadRequestCommand}" IsEnabled="{Binding IsButtonEnabled}">
+                                <Image Source="{StaticResource InfoIconImage_10}"/>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Номер заявки" Binding="{Binding Number}" Width="*"/>
+                <DataGridTextColumn Header="Тип заявки" Binding="{Binding RequestType}" Width="*"/>
+                <DataGridTextColumn Header="Статус заявки" Binding="{Binding RequestStatus}" Width="*"/>
+                <DataGridTextColumn Header="Создатель заявки" Binding="{Binding Creator}" Width="*"/>
+                <DataGridTextColumn Header="Дата создания" Binding="{Binding CreationDate}" Width="*"/>
+                <DataGridTextColumn Header="Исполнитель" Binding="{Binding Executor}" Width="*"/>
+                <DataGridTextColumn Header="Компания" Binding="{Binding Company}" Width="*"/>
+                <DataGridTemplateColumn Header="Действия" Width="Auto" Visibility="Collapsed">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Width="20" Cursor="Hand" Height="20" Margin="5,0" ToolTip="Редактировать заявку" Command="{Binding UpdateRequestCommand}" IsEnabled="{Binding IsButtonEnabled}">
+                                    <Image Source="{StaticResource PencilImage_1}"/>
+                                </Button>
+                                <Button Background="Red" Cursor="Hand" Width="20" Height="20" Margin="5,0" ToolTip="Удалить заявку" Command="{Binding DeleteRequestCommand}" IsEnabled="{Binding IsButtonEnabled}">
+                                    <TextBlock Text="-" FontSize="12" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                </Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+
+        </DataGrid>
+
+        <Button x:Name="GoBackButton" Grid.Row="2" Content="Назад" Margin="5" FontSize="16" Click="GoBackButton_Click"/>
+
+    </Grid>
+
+</Page>

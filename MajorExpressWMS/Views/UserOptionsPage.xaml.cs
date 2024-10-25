@@ -21,8 +21,10 @@ namespace MajorExpressWMS.Views
             // Кнопки управления (отсортированы в порядке полномочий) //
 
             Button ObserveRequestsButton = new() { Content = "Просмотр заявок", Margin = new(25), FontSize = 16 };
+            Button ObserveArchiveRequestsButton = new() { Content = "Просмотр архивных заявок", Margin = new(25), FontSize = 16 };
             Button CreateRequestButton = new() { Content = "Создать заявку", Margin = new(25), FontSize = 16 };
             Button ManageRequestsButton = new() { Content = "Управление заявками", Margin = new(25), FontSize = 16 };
+            Button ManageArchiveRequestsButton = new() { Content = "Управление архивными заявками", Margin = new(25), FontSize = 16 };
             Button ManageUsersButton = new() { Content = "Управление пользователями", Margin = new(25), FontSize = 16 };
 
             ObserveRequestsButton.Click += (sender, e) => MainWindow._MainWindowFrame?.Navigate(new ObserveOrManageRequestsPage());
@@ -34,9 +36,9 @@ namespace MajorExpressWMS.Views
             {
                 { "Пользователь", [ ObserveRequestsButton ] },
                 { "Курьер", [ ObserveRequestsButton ] },
-                { "Отправитель", [ ObserveRequestsButton, CreateRequestButton, ManageRequestsButton ] },
-                { "Получатель", [ ObserveRequestsButton, ManageRequestsButton ] },
-                { "Администратор", [ ObserveRequestsButton, ManageRequestsButton, ManageUsersButton ] }
+                { "Отправитель", [ ObserveRequestsButton, ObserveArchiveRequestsButton, CreateRequestButton, ManageRequestsButton ] },
+                { "Получатель", [ ObserveRequestsButton, ObserveArchiveRequestsButton, ManageRequestsButton ] },
+                { "Администратор", [ ObserveRequestsButton, ManageRequestsButton, ManageArchiveRequestsButton, ManageUsersButton ] }
             };
 
             FrozenDictionary<string, List<Button>> UserOptionButtonDictionary = _UserOptionButtonDictionary.ToFrozenDictionary();

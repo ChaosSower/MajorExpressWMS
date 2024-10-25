@@ -54,8 +54,27 @@ namespace MajorExpressWMS.Views
 
             if (RequestID.HasValue)
             {
+                var request = MainWindow.ApplicationContext?.Requests.FirstOrDefault(r => r.ID == this.RequestID);
                 PageTitleTextBlock.Text = "Редакция заявки";
                 CreateOrEditRequestButton.Content = "Изменить заявку";
+
+                if (request != null)
+                {
+                    NumberTextBox.Text = request.Number;
+                    TypeComboBox.SelectedIndex = request.RequestTypeID - 1;
+                    ExecutorComboBox.SelectedIndex = request.ExecutorID - 1;
+                    CompanyComboBox.SelectedIndex = request.CompanyID - 1;
+
+                    if (request.RequestStatusID != 1)
+                    {
+                        NumberTextBox.IsReadOnly = true;
+                        TypeComboBox.IsEnabled = false;
+                        ExecutorComboBox.IsEnabled = false;
+                        CompanyComboBox.IsEnabled = false;
+                    }
+
+                    StatusComboBox.SelectedIndex = request.RequestStatusID - 1;
+                }
             }
 
             else

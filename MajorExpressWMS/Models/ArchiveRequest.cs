@@ -20,6 +20,12 @@ namespace MajorExpressWMS.Models
         public required string RequestNumber { get; set; }
 
         /// <summary>
+        /// ID типа заявки
+        /// </summary>
+        [Required]
+        public required int RequestTypeID { get; set; }
+
+        /// <summary>
         /// ID создателя заявки
         /// </summary>
         [Required]
@@ -51,6 +57,11 @@ namespace MajorExpressWMS.Models
         public string? Description { get; set; }
 
         // Навигационные свойства //
+
+        /// <summary>
+        /// Навигационное свойство типа заявки
+        /// </summary>
+        public RequestType? RequestType { get; set; }
 
         /// <summary>
         /// Навигационное свойство создателя заявки

@@ -25,5 +25,10 @@ namespace MajorExpressWMS.Models
         /// Навигационное свойство заявок с типами
         /// </summary>
         public ICollection<Request>? Requests { get; set; }
+
+        /// <summary>
+        /// Навигационное свойство архивных заявок с типами
+        /// </summary>
+        public ICollection<ArchiveRequest>? ArchiveRequests { get; set; }
     }
 }

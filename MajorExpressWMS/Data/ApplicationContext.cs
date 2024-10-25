@@ -77,6 +77,28 @@ namespace MajorExpressWMS.Data
         public DbSet<ArchiveRequest> ArchiveRequests { get; set; }
 
         /// <summary>
+        /// Пустой конструктор класса контекста БД (для создания миграций)
+        /// </summary>
+        public ApplicationContext()
+        {
+            string PathToExe = AppDomain.CurrentDomain.BaseDirectory;
+            PathToFileOfDB = Path.Join(PathToExe, "MajorExpressDB_WMS/MajorExpressDB_WMS.txt");
+
+            if (File.Exists(PathToFileOfDB))
+            {
+                DBConnection = File.ReadAllLines(PathToFileOfDB)[0];
+
+                int RetryCount = 0;
+                InitializeDatabase(this, ref RetryCount);
+            }
+
+            else
+            {
+                MessageBox.Show($"Похоже, что файл {PathToFileOfDB.Split("/")[^1]} со строкой подключения отсутствует по полному пути:\n\n{PathToFileOfDB}\n\nНе удалось создать/подключиться к базе данных", "Ошибка подключения", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        /// <summary>
         /// Конструктор класса контекста БД
         /// </summary>
         /// <param name="IsDatabaseCreated">out bool-переменная, указывающая, была ли создана БД</param>
@@ -145,15 +167,17 @@ namespace MajorExpressWMS.Data
 
                     RetryCount++;
                     InitializeDatabase(ApplicationContext, ref RetryCount);
+
+                    return true;
                 }
 
                 else
                 {
                     MessageBox.Show("Не удалось инициализировать/изменить базу данных после нескольких попыток.\n\nЭто может свидетельствовать об ошибках миграции.", "Ошибка взаимодействия с базой данных", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
 
             return false;
+        }
+            }
         }
 
         /// <summary>
@@ -162,9 +186,6 @@ namespace MajorExpressWMS.Data
         /// <param name="ApplicationContext"></param>
         private static void Seed(ApplicationContext ApplicationContext)
         {
-            // Заполнение таблицы "Роли пользователей"
-            if (!ApplicationContext.UserRoles.Any())
-            {
                 List<UserRole> UserRoles =
                 [
                     new() { Role = "Пользователь" },
@@ -174,14 +195,14 @@ namespace MajorExpressWMS.Data
                     new() { Role = "Администратор" }
                 ];
 
+            // Заполнение таблицы "Роли пользователей"
+            if (!ApplicationContext.UserRoles.Any())
+            {
                 ApplicationContext.UserRoles.AddRange(UserRoles);
 
                 ApplicationContext.SaveChanges();
             }
 
-            // Заполнение таблицы "Пользователи"
-            if (!ApplicationContext.Users.Any())
-            {
                 List<User> Users =
                 [
                     new() { Name = "Кирилл", Surname = "Евтюхин", Patronymic = "Олегович", Login = "EvtyKO", Password = "12345", UserRoleID = 1 },
@@ -196,14 +217,14 @@ namespace MajorExpressWMS.Data
                     new() { Name = "Анастасия", Surname = "Ромина", Login = "RomiAN", Password = "56789", UserRoleID = 5 }
                 ];
 
+            // Заполнение таблицы "Пользователи"
+            if (!ApplicationContext.Users.Any())
+            {
                 ApplicationContext.Users.AddRange(Users);
 
                 ApplicationContext.SaveChanges();
             }
 
-            // Заполнение таблицы создателей заявок
-            if (!ApplicationContext.RequestCreators.Any())
-            {
                 List<RequestCreator> RequestCreators =
                 [
                     new() { UserID = 1 },
@@ -213,14 +234,14 @@ namespace MajorExpressWMS.Data
                     new() { UserID = 5 }
                 ];
 
+            // Заполнение таблицы создателей заявок
+            if (!ApplicationContext.RequestCreators.Any())
+            {
                 ApplicationContext.RequestCreators.AddRange(RequestCreators);
 
                 ApplicationContext.SaveChanges();
             }
 
-            // Заполнение таблицы "Исполнители"
-            if (!ApplicationContext.RequestExecutors.Any())
-            {
                 List<RequestExecutor> RequestExecutors =
                 [
                     new() { UserID = 6 },
@@ -230,14 +251,14 @@ namespace MajorExpressWMS.Data
                     new() { UserID = 10 }
                 ];
 
+            // Заполнение таблицы "Исполнители"
+            if (!ApplicationContext.RequestExecutors.Any())
+            {
                 ApplicationContext.RequestExecutors.AddRange(RequestExecutors);
 
                 ApplicationContext.SaveChanges();
             }
 
-            // Заполнение таблицы "Архивщики"
-            if (!ApplicationContext.RequestArchivers.Any())
-            {
                 List<RequestArchiver> RequestArchivers =
                 [
                     new() { UserID = 2 },
@@ -247,14 +268,14 @@ namespace MajorExpressWMS.Data
                     new() { UserID = 10 }
                 ];
 
+            // Заполнение таблицы "Архивщики"
+            if (!ApplicationContext.RequestArchivers.Any())
+            {
                 ApplicationContext.RequestArchivers.AddRange(RequestArchivers);
 
                 ApplicationContext.SaveChanges();
             }
 
-            // Заполнение таблицы "Типы заявок"
-            if (!ApplicationContext.RequestTypes.Any())
-            {
                 List<RequestType> RequestTypes =
                 [
                     new() { Type = "Отправка" },
@@ -262,14 +283,14 @@ namespace MajorExpressWMS.Data
                     new() { Type = "Получение" }
                 ];
 
+            // Заполнение таблицы "Типы заявок"
+            if (!ApplicationContext.RequestTypes.Any())
+            {
                 ApplicationContext.RequestTypes.AddRange(RequestTypes);
 
                 ApplicationContext.SaveChanges();
             }
 
-            // Заполнение таблицы "Статусы заявок"
-            if (!ApplicationContext.RequestStatuses.Any())
-            {
                 List<RequestStatus> RequestStatuses =
                 [
                     new() { Status = "Новая" },
@@ -279,14 +300,14 @@ namespace MajorExpressWMS.Data
                     new() { Status = "Удалена" }
                 ];
 
+            // Заполнение таблицы "Статусы заявок"
+            if (!ApplicationContext.RequestStatuses.Any())
+            {
                 ApplicationContext.RequestStatuses.AddRange(RequestStatuses);
 
                 ApplicationContext.SaveChanges();
             }
 
-            // Заполнение таблицы "Компании"
-            if (!ApplicationContext.Companies.Any())
-            {
                 List<Company> Companies =
                 [
                     new() { Name = "Молот и наковальня" },
@@ -294,31 +315,31 @@ namespace MajorExpressWMS.Data
                     new() { Name = "Логистик Технолоджис" }
                 ];
 
+            // Заполнение таблицы "Компании"
+            if (!ApplicationContext.Companies.Any())
+            {
                 ApplicationContext.Companies.AddRange(Companies);
 
                 ApplicationContext.SaveChanges();
             }
 
+                List<ArchiveRequest> ArchiveRequests =
+                [
+                new() { RequestNumber = "2341_AP_DD_899", RequestTypeID = 1, CreatorID = 1, CreationDate = new(2021, 01, 25), ArchiverID = 5, ArchiveDate = new(2021, 01, 26) },
+                new() { RequestNumber = "412_LP_901", RequestTypeID = 2, CreatorID = 5, CreationDate = new(2022, 05, 14), ArchiverID = 1, ArchiveDate = new(2022, 05, 20), Description = "Отменена по причине: \"Груз повреждён при транспортировке\"" },
+                new() { RequestNumber = "117892_SA_LU_9", RequestTypeID = 3, CreatorID = 4, CreationDate = new(2023, 08, 01), ArchiverID = 3, ArchiveDate = new(2023, 08, 05) },
+                new() { RequestNumber = "15789_F_9", RequestTypeID = 3, CreatorID = 3, CreationDate = new(2023, 10, 05), ArchiverID = 2, ArchiveDate = new(2023, 10, 25) },
+                new() { RequestNumber = "87_LO_PO_83299", RequestTypeID = 1, CreatorID = 2, CreationDate = new(2024, 02, 11), ArchiverID = 4, ArchiveDate = new(2024, 02, 17), Description = "Отменена по причине: \"Компания-контрагент рассторгнула договор\"" }
+                ];
+
             // Заполнение таблицы "Архивные заявки"
             if (!ApplicationContext.ArchiveRequests.Any())
             {
-                List<ArchiveRequest> ArchiveRequests =
-                [
-                    new() { RequestNumber = "2341_AP_DD_899", CreatorID = 1, CreationDate = new(2021, 01, 25), ArchiverID = 5, ArchiveDate = new(2021, 01, 26) },
-                    new() { RequestNumber = "412_LP_901", CreatorID = 5, CreationDate = new(2022, 05, 14), ArchiverID = 1, ArchiveDate = new(2022, 05, 20), Description = "Отменена по причине: \"Груз повреждён при транспортировке\"" },
-                    new() { RequestNumber = "117892_SA_LU_9", CreatorID = 4, CreationDate = new(2023, 08, 01), ArchiverID = 3, ArchiveDate = new(2023, 08, 05) },
-                    new() { RequestNumber = "15789_F_9", CreatorID = 3, CreationDate = new(2023, 10, 05), ArchiverID = 2, ArchiveDate = new(2023, 10, 25) },
-                    new() { RequestNumber = "87_LO_PO_83299", CreatorID = 2, CreationDate = new(2024, 02, 11), ArchiverID = 4, ArchiveDate = new(2024, 02, 17), Description = "Отменена по причине: \"Компания-контрагент рассторгнула договор\"" }
-                ];
-
                 ApplicationContext.ArchiveRequests.AddRange(ArchiveRequests);
 
                 ApplicationContext.SaveChanges();
             }
 
-            // Заполнение таблицы "Заявки"
-            if (!ApplicationContext.Requests.Any())
-            {
                 List<Request> Requests =
                 [
                     new() { Number = "123_RU_313", RequestTypeID = 1, RequestStatusID = 1, CreatorID = 1, CreationDate = new(2024, 01, 17), ExecutorID = 1, CompanyID = 1 },
@@ -333,6 +354,9 @@ namespace MajorExpressWMS.Data
                     new() { Number = "3_PY_JO_01", RequestTypeID = 1, RequestStatusID = 5, CreatorID = 1, CreationDate = new(2021, 10, 19), ExecutorID = 5, CompanyID = 1 }
                 ];
 
+            // Заполнение таблицы "Заявки"
+            if (!ApplicationContext.Requests.Any())
+            {
                 ApplicationContext.Requests.AddRange(Requests);
 
                 ApplicationContext.SaveChanges();
